@@ -3,7 +3,6 @@ package modelo;
 import vista.Formulario;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class HiloPaso2 extends Thread {
 
@@ -27,9 +26,7 @@ public class HiloPaso2 extends Thread {
     public void run() {
 
         Formulario f = new Formulario();
-        String url = "jdbc:mysql://localhost:3306/bbdd_psp_1";
-        String usuario = "DAM2020_PSP";
-        String password = "DAM2020_PSP";
+        String usuario = "DAM2020_PSP", password = "DAM2020_PSP", url = "jdbc:mysql://localhost:3306/bbdd_psp_1";
         int ingresos_totales = 0;
         long tiempo = System.currentTimeMillis();
 
@@ -37,7 +34,7 @@ public class HiloPaso2 extends Thread {
 
             Connection connection = DriverManager.getConnection(url, usuario, password);
             Statement statement = connection.createStatement();
-            String query = "SELECT * FROM empleados WHERE id >=" + minimo + " AND ID < " + maximo;
+            String query = "SELECT * FROM empleados WHERE ID >=" + minimo + " AND ID < " + maximo;
             ResultSet resultSet = statement.executeQuery(query);
 
             //Recorremos la base de datos
@@ -50,10 +47,10 @@ public class HiloPaso2 extends Thread {
 
             //Agregamos a setSuma todos los ingresos de este hilo
             setSuma(ingresos_totales);
-            System.out.println("suma es: " + getSuma());
+            System.out.println("la suma del hilo es: " + getSuma());
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("\nLa base de datos no esta en linea");
         }
     }
 

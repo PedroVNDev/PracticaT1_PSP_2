@@ -9,9 +9,7 @@ public class HiloPaso1 extends Thread {
     public void run() {
 
         Formulario f = new Formulario();
-        String url = "jdbc:mysql://localhost:3306/bbdd_psp_1";
-        String usuario = "DAM2020_PSP";
-        String password = "DAM2020_PSP";
+        String usuario = "DAM2020_PSP", password = "DAM2020_PSP", url = "jdbc:mysql://localhost:3306/bbdd_psp_1";
         int ingresos_totales = 0;
         long tiempo = System.currentTimeMillis();
 
@@ -27,10 +25,10 @@ public class HiloPaso1 extends Thread {
                 System.out.print("ID: ");
                 System.out.println(resultSet.getInt("ID"));
 
-                System.out.print("EMAIL: ");
+                System.out.print("Email: ");
                 System.out.println(resultSet.getString("EMAIL"));
 
-                System.out.print("INGRESOS: ");
+                System.out.print("Ingresos: ");
                 System.out.println(resultSet.getInt("INGRESOS"));
 
                 //Tomamos los ingresos 1 a 1 y los añadimos a la variale ingresos_totales
@@ -41,7 +39,7 @@ public class HiloPaso1 extends Thread {
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("\nLa base de datos no esta en linea");
 
         } finally {
             System.out.println("La tarea tardo: " + (System.currentTimeMillis() - tiempo) + " milisegundos");

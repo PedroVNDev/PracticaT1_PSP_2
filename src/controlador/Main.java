@@ -14,18 +14,12 @@ public class Main {
     public static void main(String[] args) {
 
         Formulario f = new Formulario();
-
         Scanner teclado = new Scanner(System.in);
 
-        int maximo = 0;
-        int minimo = 1;
-        int opcion = 0;
-        int maximoEmpleados = 0;
-        int sumas = 0;
+        int maximo = 0, minimo = 1, opcion = 0, maximoEmpleados = 0, sumas = 0, empleados = 0;
         boolean mismatch = false;
 
         f.menu();
-        int empleados = 0;
         maximoEmpleados = contarEmpleados(empleados);
 
         do {
@@ -40,31 +34,38 @@ public class Main {
 
                 opcion = teclado.nextInt();
                 teclado.nextLine();
-                maximo = (maximoEmpleados / 5)+1;
+                maximo = (maximoEmpleados / 5) + 1;
 
                 ArrayList<HiloPaso2> hilosArray = new ArrayList<HiloPaso2>();
 
                 switch (opcion) {
 
+                    //Hilo secuencial
                     case 1:
                         new HiloPaso1().start();
                         break;
 
+                    //Hilos concurrentes
                     case 2:
+                        //Agregamos los hilos a un arraylist con su minimo de empleados y su maximo para repartir la tarea
                         for (int x = 1; x <= 5; x++) {
                             hilosArray.add(new HiloPaso2(minimo, maximo));
                             minimo = minimo += maximoEmpleados / 5;
                             maximo += maximoEmpleados / 5;
                         }
 
+                        //Inicializamos el tiempo a la vez que los hilos en un foreach
                         long tiempo = System.currentTimeMillis();
                         hilosArray.forEach(HiloPaso2::start);
 
+                        //Obtenemos los ingresos mediante un get y sincronizamos los datos mediante un foreach con join
                         for (HiloPaso2 hilo : hilosArray) {
                             hilo.join();
                             sumas += hilo.getSuma();
                         }
-                        System.out.println("\nsuma total es: " + sumas);
+
+                        //Mostramos los ingresos totales entre los 5 hilos y lo que ha tardado la tarea en total
+                        System.out.println("\nLa suma total de todos los hilos es: " + sumas);
                         System.out.println("\nLa tarea tardo: " + (System.currentTimeMillis() - tiempo) + " milisegundos\n");
                         f.menu();
                         break;
@@ -87,11 +88,10 @@ public class Main {
 
     }
 
+    //Metodo que cuenta todos los empleados de la base de datos, necesario para operar con cualquier cantidad de empleados
     public static int contarEmpleados(int empleados) {
 
-        String url = "jdbc:mysql://localhost:3306/bbdd_psp_1";
-        String usuario = "DAM2020_PSP";
-        String password = "DAM2020_PSP";
+        String usuario = "DAM2020_PSP", password = "DAM2020_PSP", url = "jdbc:mysql://localhost:3306/bbdd_psp_1";
 
         try {
             Connection connection = DriverManager.getConnection(url, usuario, password);

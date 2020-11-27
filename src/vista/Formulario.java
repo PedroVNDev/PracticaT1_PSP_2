@@ -2,7 +2,7 @@ package vista;
 
 public class Formulario {
 
-    public void menu(){
+    public void menu() {
 
         System.out.println("¿Que paso quieres realizar?");
         System.out.println("1. Paso1");
