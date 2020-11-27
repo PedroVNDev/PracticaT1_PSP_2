@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="PracticaT1_PSP_2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/PracticaT1_PSP_2_jar</output-path>
+    <root id="archive" name="PracticaT1_PSP_2.jar">
+      <element id="module-output" name="PracticaT1_PSP_2" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/paquetes/mysql-connector-java-5.1.15-bin_1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
