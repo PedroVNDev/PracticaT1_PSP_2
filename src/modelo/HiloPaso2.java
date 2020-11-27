@@ -3,60 +3,60 @@ package modelo;
 import vista.Formulario;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class HiloPaso2 extends Thread {
 
-    private int totalEmpleados;
+    private int maximo;
+    private int minimo;
+    private int ingresosTotal;
 
-    public HiloPaso2(int totalEmpleados) {
-        this.totalEmpleados = totalEmpleados;
+    public int getSuma() {
+        return ingresosTotal;
+    }
+
+    public void setSuma(int suma) {
+        this.ingresosTotal = suma;
+    }
+
+    public HiloPaso2(int minimo, int maximo) {
+        this.minimo = minimo;
+        this.maximo = maximo;
     }
 
     public void run() {
 
         Formulario f = new Formulario();
-        System.out.println("\n");
         String url = "jdbc:mysql://localhost:3306/bbdd_psp_1";
         String usuario = "DAM2020_PSP";
         String password = "DAM2020_PSP";
         int ingresos_totales = 0;
         long tiempo = System.currentTimeMillis();
 
-        for (int x = 1; x <= 80; x++) {
+        try {
 
-            try {
+            Connection connection = DriverManager.getConnection(url, usuario, password);
+            Statement statement = connection.createStatement();
+            String query = "SELECT * FROM empleados WHERE id >=" + minimo + " AND ID < " + maximo;
+            ResultSet resultSet = statement.executeQuery(query);
 
-                Connection connection = DriverManager.getConnection(url, usuario, password);
-                Statement statement = connection.createStatement();
-                String query = "SELECT * FROM empleados where id ='" + x + "'";
-                ResultSet resultSet = statement.executeQuery(query);
+            //Recorremos la base de datos
+            while (resultSet.next()) {
 
-                //Recorremos la base de datos y la mostramos
-                while (resultSet.next()) {
+                //Tomamos los ingresos 1 a 1 y los añadimos a la variale ingresos_totales
+                ingresos_totales += resultSet.getInt("INGRESOS");
 
-                    System.out.print("ID: ");
-                    System.out.println(resultSet.getInt("ID"));
-
-                    System.out.print("EMAIL: ");
-                    System.out.println(resultSet.getString("EMAIL"));
-
-                    System.out.print("INGRESOS: ");
-                    System.out.println(resultSet.getInt("INGRESOS"));
-
-                    //Tomamos los ingresos 1 a 1 y los añadimos a la variale ingresos_totales
-                    ingresos_totales += resultSet.getInt("INGRESOS");
-
-                    System.out.println("");
-
-                }
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }finally {
-                System.out.println("Los ingresos totales son: " + ingresos_totales);
             }
+
+            //Agregamos a setSuma todos los ingresos de este hilo
+            setSuma(ingresos_totales);
+            System.out.println("suma es: " + getSuma());
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-
-
     }
+
+
 }
+

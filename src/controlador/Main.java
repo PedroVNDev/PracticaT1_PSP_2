@@ -5,6 +5,7 @@ import modelo.HiloPaso1;
 import vista.Formulario;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -13,16 +14,19 @@ public class Main {
     public static void main(String[] args) {
 
         Formulario f = new Formulario();
+
         Scanner teclado = new Scanner(System.in);
 
-        int inicio = 0;
+        int maximo = 0;
+        int minimo = 1;
         int opcion = 0;
-        int totalEmpleados = 0;
+        int maximoEmpleados = 0;
+        int sumas = 0;
         boolean mismatch = false;
 
         f.menu();
         int empleados = 0;
-        totalEmpleados = contarEmpleados(empleados);
+        maximoEmpleados = contarEmpleados(empleados);
 
         do {
 
@@ -36,6 +40,9 @@ public class Main {
 
                 opcion = teclado.nextInt();
                 teclado.nextLine();
+                maximo = (maximoEmpleados / 5)+1;
+
+                ArrayList<HiloPaso2> hilosArray = new ArrayList<HiloPaso2>();
 
                 switch (opcion) {
 
@@ -44,17 +51,22 @@ public class Main {
                         break;
 
                     case 2:
-                            new HiloPaso2(totalEmpleados).start();
-                        break;
-
-                    case 3:
-                        for (int y = 1; y <= 4; y++) {
-                            if (y == 1){
-                                System.out.println("\nEmpleados a hacer:" + totalEmpleados / 5 + " Inicio hilo: " + inicio);
-                            }
-                            System.out.println("\nEmpleados a hacer:" + totalEmpleados / 5 + " Inicio hilo: " + (totalEmpleados / 5) * y);
+                        for (int x = 1; x <= 5; x++) {
+                            hilosArray.add(new HiloPaso2(minimo, maximo));
+                            minimo = minimo += maximoEmpleados / 5;
+                            maximo += maximoEmpleados / 5;
                         }
-                        System.out.println();
+
+                        long tiempo = System.currentTimeMillis();
+                        hilosArray.forEach(HiloPaso2::start);
+
+                        for (HiloPaso2 hilo : hilosArray) {
+                            hilo.join();
+                            sumas += hilo.getSuma();
+                        }
+                        System.out.println("\nsuma total es: " + sumas);
+                        System.out.println("\nLa tarea tardo: " + (System.currentTimeMillis() - tiempo) + " milisegundos\n");
+                        f.menu();
                         break;
 
                     case 0:
@@ -66,7 +78,7 @@ public class Main {
                         break;
                 }
 
-            } catch (InputMismatchException ex) {
+            } catch (InputMismatchException | InterruptedException ex) {
                 System.out.println("Introduce numeros\n");
                 teclado.nextLine();
             }
@@ -95,9 +107,8 @@ public class Main {
 
             }
 
-
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("\nLa base de datos no esta en linea");
 
         } finally {
             return empleados;

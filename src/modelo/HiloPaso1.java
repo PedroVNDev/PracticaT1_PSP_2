@@ -44,6 +44,8 @@ public class HiloPaso1 extends Thread {
             ex.printStackTrace();
 
         } finally {
+            System.out.println("La tarea tardo: " + (System.currentTimeMillis() - tiempo) + " milisegundos");
+            System.out.println("Los ingresos totales son: " + ingresos_totales + "\n");
             f.menu();
         }
     }
