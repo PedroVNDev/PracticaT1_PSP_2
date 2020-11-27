@@ -43,7 +43,7 @@ Al inicializar la aplicación tendremos la posibilidad de seleccionar entre esta
 
 -La opcion salir nos permitira salir de la aplicación
 
-# Reglas y Excepciones
+# Reglas y Excepciones 📄
 
 * No se puede introducir numeros negativos
 * No se puede introducir letras
